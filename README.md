@@ -13,11 +13,11 @@ Bu proje, uçuş rezervasyon sistemi geliştirme görevini yerine getirmek için
 ## Kurulum
 
 1. **Projeyi İndirin:**
-   
-bash
+```sh
    git clone https://github.com/dogusyasayan/flight-booking-system.git
+   ```
 
-#Veritabanı Ayarları:
+# Veritabanı Ayarları:
 
 Projede H2 veritabanı kullanılmaktadır.
 Veritabanı ayarlarına dokunmanıza gerek yoktur.
