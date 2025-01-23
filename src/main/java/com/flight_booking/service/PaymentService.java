@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 public class PaymentService {
 
     private final FlightService flightService;
-    private final SeatService seatService;
     private final SeatRepository seatRepository;
 
     @Transactional
@@ -59,7 +58,10 @@ public class PaymentService {
         seats.stream()
                 .filter(seat -> requestedSeatNumbers.contains(seat.getSeatNumber()))
                 .forEach(seat -> {
-                    seat.setSeatStatus(SeatStatus.SOLD);
+                    if (!SeatStatus.AVAILABLE.equals(seat.getSeatStatus())) {
+                        throw new PaymentException(ErrorStatus.SEAT_ALREADY_SOLD);
+                    }
+                    seat.setSeatStatus(SeatStatus.RESERVED);
                     seatRepository.save(seat);
                     log.info("Seat {} reserved successfully.", seat.getSeatNumber());
                 });

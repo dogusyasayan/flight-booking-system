@@ -4,6 +4,7 @@ import com.flight_booking.builder.FlightBuilder;
 import com.flight_booking.converter.FlightConverter;
 import com.flight_booking.domain.Flight;
 import com.flight_booking.exception.FlightNotFoundException;
+import com.flight_booking.exception.FlightNumberAlreadyExists;
 import com.flight_booking.exception.enums.ErrorStatus;
 import com.flight_booking.model.request.CreateFlightRequest;
 import com.flight_booking.model.request.UpdateFlightRequest;
@@ -26,23 +27,25 @@ public class FlightService {
     private final FlightBuilder flightBuilder;
     private final FlightConverter flightConverter;
 
-    @Transactional(readOnly = true)
-    public FlightInformationResponse getFlightInformation(Long flightId) {
-        Flight flight = getFlightById(flightId);
-        return flightConverter.infoFlight(flight, flight.getSeats());
-    }
-
     @Transactional
     public FlightResponse createFlight(CreateFlightRequest createFlightRequest) {
         Flight newFlight = flightBuilder.buildFlight(createFlightRequest);
         Optional<Flight> optionalFlight = flightRepository.findByFlightCode(newFlight.getFlightCode());
         if (!optionalFlight.isEmpty()) {
             log.error("Flight with code {} already exists", newFlight.getFlightCode());
-            throw new FlightNotFoundException(ErrorStatus.FLIGHT_NOT_FOUND);
+            throw new FlightNumberAlreadyExists(ErrorStatus.FLIGHT_ALREADY_EXITS);
         }
         flightRepository.save(newFlight);
         log.info("Flight saved successfully!");
         return flightConverter.apply(newFlight);
+    }
+
+    @Transactional
+    public void updateFlightInfo(Long flightId, UpdateFlightRequest updateFlightRequest) {
+        Flight flight = getFlightById(flightId);
+        Flight updatedFlight = flightConverter.updateFlightInfo(flight, updateFlightRequest);
+        flightRepository.save(updatedFlight);
+        log.info("Flight saved successfully!");
     }
 
     @Transactional
@@ -53,19 +56,17 @@ public class FlightService {
     }
 
     @Transactional(readOnly = true)
+    public FlightInformationResponse getFlightInformation(Long flightId) {
+        Flight flight = getFlightById(flightId);
+        return flightConverter.infoFlight(flight, flight.getSeats());
+    }
+
+    @Transactional(readOnly = true)
     public Flight getFlightById(Long flightId) {
         Optional<Flight> optionalFlight = flightRepository.findById(flightId);
         if (optionalFlight.isEmpty()) {
             throw new FlightNotFoundException(ErrorStatus.FLIGHT_NOT_FOUND);
         }
         return optionalFlight.get();
-    }
-
-    @Transactional
-    public void updateFlightInfo(Long flightId, UpdateFlightRequest updateFlightRequest) {
-        Flight flight = getFlightById(flightId);
-        Flight updatedFlight = flightConverter.updateFlightInfo(flight, updateFlightRequest);
-        flightRepository.save(updatedFlight);
-        log.info("Flight saved successfully!");
     }
 }
