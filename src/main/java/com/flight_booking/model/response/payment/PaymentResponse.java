@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -21,4 +22,5 @@ public class PaymentResponse implements Serializable {
     private FlightInformationResponse flightInformationResponse;
     private List<String> seatNumbers;
     private PaymentStatus paymentStatus;
+    private BigDecimal price;
 }

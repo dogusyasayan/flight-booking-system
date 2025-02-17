@@ -16,7 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +35,7 @@ public class FlightService {
         Optional<Flight> optionalFlight = flightRepository.findByFlightCode(newFlight.getFlightCode());
         if (!optionalFlight.isEmpty()) {
             log.error("Flight with code {} already exists", newFlight.getFlightCode());
-            throw new FlightNumberAlreadyExists(ErrorStatus.FLIGHT_ALREADY_EXITS);
+            throw new FlightNumberAlreadyExists(ErrorStatus.FLIGHT_ALREADY_EXISTS);
         }
         flightRepository.save(newFlight);
         log.info("Flight saved successfully!");
@@ -41,32 +43,40 @@ public class FlightService {
     }
 
     @Transactional
-    public void updateFlightInfo(Long flightId, UpdateFlightRequest updateFlightRequest) {
-        Flight flight = getFlightById(flightId);
+    public void updateFlightInfo(String flightCode, UpdateFlightRequest updateFlightRequest) {
+        Flight flight = getFlightByCode(flightCode);
         Flight updatedFlight = flightConverter.updateFlightInfo(flight, updateFlightRequest);
         flightRepository.save(updatedFlight);
         log.info("Flight saved successfully!");
     }
 
     @Transactional
-    public void deleteFlight(Long flightId) {
-        Flight flight = getFlightById(flightId);
+    public void deleteFlight(String flightCode) {
+        Flight flight = getFlightByCode(flightCode);
         flightRepository.delete(flight);
         log.info("Flight removed successfully!");
     }
 
     @Transactional(readOnly = true)
-    public FlightInformationResponse getFlightInformation(Long flightId) {
-        Flight flight = getFlightById(flightId);
+    public FlightInformationResponse getFlightInformation(String flightCode) {
+        Flight flight = getFlightByCode(flightCode);
         return flightConverter.infoFlight(flight, flight.getSeats());
     }
 
     @Transactional(readOnly = true)
-    public Flight getFlightById(Long flightId) {
-        Optional<Flight> optionalFlight = flightRepository.findById(flightId);
+    public Flight getFlightByCode(String flightCode) {
+        Optional<Flight> optionalFlight = flightRepository.findByFlightCode(flightCode);
         if (optionalFlight.isEmpty()) {
             throw new FlightNotFoundException(ErrorStatus.FLIGHT_NOT_FOUND);
         }
         return optionalFlight.get();
+    }
+
+    @Transactional(readOnly = true)
+    public List<FlightResponse> getAllFlights() {
+        List<Flight> flights = flightRepository.findAll();
+        return flights.stream()
+                .map(flightConverter::apply)
+                .collect(Collectors.toList());
     }
 }

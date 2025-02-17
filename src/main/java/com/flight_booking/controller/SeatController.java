@@ -1,16 +1,12 @@
 package com.flight_booking.controller;
 
 import com.flight_booking.model.request.CreateSeatsRequest;
+import com.flight_booking.model.response.seat.SeatInformationResponse;
 import com.flight_booking.service.SeatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,15 +17,23 @@ public class SeatController {
 
     private final SeatService seatService;
 
-    @PostMapping("/{flightId}")
+    @PostMapping("/{flightCode}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createSeat(@PathVariable Long flightId, @RequestBody CreateSeatsRequest createSeatsRequest) {
-        seatService.createSeatForFlight(flightId, createSeatsRequest);
+    @PreAuthorize("hasRole('ADMIN')")
+    public void createSeat(@PathVariable String flightCode, @RequestBody CreateSeatsRequest createSeatsRequest) {
+        seatService.createSeatForFlight(flightCode, createSeatsRequest);
     }
 
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
     public void updateSeats(@RequestBody List<String> seatNumbers) {
         seatService.updateSeat(seatNumbers);
+    }
+
+    @GetMapping("/{flightCode}")
+    @PreAuthorize("hasAnyRole('PASSENGER', 'ADMIN')")
+    public List<SeatInformationResponse> getSeatsByFlight(@PathVariable String flightCode) {
+        return seatService.getSeatsByFlight(flightCode);
     }
 }

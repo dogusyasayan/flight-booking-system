@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Booking - Login</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Ana Konteyner -->
+<div class="container">
+
+    <!-- Giriş Formu -->
+    <div class="form-container">
+        <h2>Flight Booking System</h2>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="login">Login</button>
+            <button class="tab-button" data-tab="register">Register</button>
+        </div>
+
+        <div class="form-content">
+            <!-- Login Form -->
+            <div class="tab-content active" id="login">
+                <form id="loginForm">
+                    <input type="text" id="loginUsername" placeholder="Username" required>
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <p id="loginError" class="error-message"></p> <!-- Hata Mesajı -->
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+
+            <!-- Register Form -->
+            <div class="tab-content" id="register">
+                <form id="registerForm">
+                    <input type="text" id="registerUsername" placeholder="Username" required>
+                    <input type="password" id="registerPassword" placeholder="Password" required>
+                    <select id="registerRole">
+                        <option value="PASSENGER">🛫 Passenger</option>
+                        <option value="ADMIN">⚙️ Admin</option>
+                    </select>
+                    <p id="registerError" class="error-message"></p> <!-- Hata Mesajı eklendi -->
+                    <button type="submit">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="js/auth.js"></script>
+</body>
+</html>

@@ -1,14 +1,21 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:file:~/data/flight;AUTO_SERVER=TRUE
     driver-class-name: org.h2.Driver
-    username: sa
-    password: password
+    username: root
+    password: root
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate.show_sql: true
   h2:
     console:
       enabled: true
+
+  web:
+    resources:
+      static-locations: classpath:/static/, classpath:/public/, classpath:/resources/, classpath:/META-INF/resources/
+
+jwt:
+  secret: mysecretkeymysecretkeymysecretkeymysecretkey

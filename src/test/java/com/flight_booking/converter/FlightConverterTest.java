@@ -44,20 +44,21 @@ class FlightConverterTest {
         //then
         assertThat(result)
                 .extracting(
+                        FlightResponse::getFlightCode,
                         FlightResponse::getName,
                         FlightResponse::getDescription,
-                        FlightResponse::getFlightCode,
-                        FlightResponse::getDepartureTime,
-                        FlightResponse::getArrivalTime
+                        FlightResponse::getFormattedDepartureTime,
+                        FlightResponse::getFormattedArrivalTime
                 )
                 .containsExactly(
+                        "TK1997",
                         "rotterdam",
                         "abroad",
-                        "TK1997",
-                        LocalDateTime.of(1997, 11, 14, 10, 00),
-                        LocalDateTime.of(1997, 11, 14, 12, 00)
+                        "14.11.1997 10:00", // Beklenen format
+                        "14.11.1997 12:00"  // Beklenen format
                 );
     }
+
 
     @Test
     void it_should_update_flight_info() {

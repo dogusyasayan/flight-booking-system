@@ -1,5 +1,6 @@
 package com.flight_booking.repository;
 
+import com.flight_booking.domain.Flight;
 import com.flight_booking.domain.Seat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -11,5 +12,9 @@ import java.util.List;
 public interface SeatRepository extends JpaRepository<Seat, Long>, JpaSpecificationExecutor<Seat> {
 
     List<Seat> findAllBySeatNumberIn(List<String> seatNumbers);
+
+    List<Seat> findByFlight_FlightCode(String flightCode);
+
+    List<Seat> findByFlight(Flight flight);
 }
 

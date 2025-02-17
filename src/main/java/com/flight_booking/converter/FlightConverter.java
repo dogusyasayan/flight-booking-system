@@ -9,6 +9,7 @@ import com.flight_booking.model.response.seat.SeatInformationResponse;
 import com.flight_booking.utils.DateTimeUtils;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -23,8 +24,9 @@ public class FlightConverter {
                 .flightCode(flight.getFlightCode())
                 .name(flight.getName())
                 .description(flight.getDescription())
-                .departureTime(flight.getDepartureTime())
-                .arrivalTime(flight.getArrivalTime())
+                .formattedDepartureTime(DateTimeUtils.formatLocalDateTime(flight.getDepartureTime()))
+                .formattedArrivalTime(DateTimeUtils.formatLocalDateTime(flight.getArrivalTime()))
+                .pastFlight(flight.getDepartureTime().isBefore(LocalDateTime.now()))
                 .build();
     }
 

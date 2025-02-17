@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+          integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+</head>
+<body>
+<div class="dashboard-container">
+    <div class="header">
+        <h1>Flight Management System</h1>
+        <button id="logoutBtn" class="logout-btn btn-special">Logout</button>
+    </div>
+    <div class="content">
+        <div class="flight-list">
+            <h2>All Flights</h2>
+            <ul id="flightsContainer"></ul>
+        </div>
+
+        <div class="forms-container">
+            <div class="form-tabs">
+                <button class="form-tab active" data-form="createFlight">Create Flight</button>
+                <button class="form-tab" data-form="updateFlight">Update Flight</button>
+                <button class="form-tab" data-form="deleteFlight">Delete Flight</button>
+                <button class="form-tab" data-form="addSeats">Add Seats</button>
+            </div>
+
+            <div class="form-content active" id="createFlight">
+                <h2>Create Flight</h2>
+                <form id="createFlightForm">
+                    <div class="form-group">
+                        <label for="flightName">Flight Name:</label>
+                        <input type="text" id="flightName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="flightDescription">Description:</label>
+                        <input type="text" id="flightDescription" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="departureTime">Departure Time:</label>
+                        <input type="datetime-local" id="departureTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="arrivalTime">Arrival Time:</label>
+                        <input type="datetime-local" id="arrivalTime" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </form>
+            </div>
+
+            <div class="form-content" id="updateFlight">
+                <h2>Update Flight</h2>
+                <form id="updateFlightForm">
+                    <div class="form-group">
+                        <label for="updateFlightCode">Flight Code:</label>
+                        <input type="text" id="updateFlightCode" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateFlightName">Flight Name:</label>
+                        <input type="text" id="updateFlightName">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateFlightDescription">Description:</label>
+                        <input type="text" id="updateFlightDescription">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateDepartureTime">Departure Time:</label>
+                        <input type="datetime-local" id="updateDepartureTime">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateArrivalTime">Arrival Time:</label>
+                        <input type="datetime-local" id="updateArrivalTime">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+
+            <div class="form-content" id="deleteFlight">
+                <h2>Delete Flight</h2>
+                <form id="deleteFlightForm">
+                    <div class="form-group">
+                        <label for="deleteFlightCode">Flight Code:</label>
+                        <input type="text" id="deleteFlightCode" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+
+            <div class="form-content" id="addSeats">
+                <h2>Add Seats</h2>
+                <form id="addSeatsForm">
+                    <div class="form-group">
+                        <label for="seatFlightCode">Flight Code:</label>
+                        <input type="text" id="seatFlightCode" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="numberOfSeats">Number of Seats:</label>
+                        <input type="number" id="numberOfSeats" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="seatPrice">Seat Price:</label>
+                        <input type="number" id="seatPrice" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/adminDashboard.js"></script>
+</body>
+</html>

@@ -5,8 +5,14 @@ import java.time.format.DateTimeFormatter;
 
 public class DateTimeUtils {
 
+    private static final DateTimeFormatter PARSE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter DISPLAY_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+
     public static LocalDateTime parseToLocalDateTime(String dateTimeString) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return LocalDateTime.parse(dateTimeString, formatter);
+        return LocalDateTime.parse(dateTimeString, PARSE_FORMATTER);
+    }
+
+    public static String formatLocalDateTime(LocalDateTime dateTime) {
+        return dateTime.format(DISPLAY_FORMATTER);
     }
 }

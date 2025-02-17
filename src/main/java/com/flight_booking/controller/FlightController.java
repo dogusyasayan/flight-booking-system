@@ -7,15 +7,10 @@ import com.flight_booking.model.response.flight.FlightResponse;
 import com.flight_booking.service.FlightService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/flight")
@@ -24,27 +19,36 @@ public class FlightController {
 
     private final FlightService flightService;
 
-    @GetMapping("/{flightId}")
-    @ResponseStatus(HttpStatus.OK)
-    public FlightInformationResponse getFlightInformation(@PathVariable Long flightId) {
-        return flightService.getFlightInformation(flightId);
+    @GetMapping("/{flightCode}")
+    @PreAuthorize("hasAnyRole('PASSENGER', 'ADMIN')")
+    public FlightInformationResponse getFlightInformation(@PathVariable String flightCode) {
+        return flightService.getFlightInformation(flightCode);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public FlightResponse createFlight(@RequestBody CreateFlightRequest createFlightRequest) {
         return flightService.createFlight(createFlightRequest);
     }
 
-    @DeleteMapping("/{flightId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteFlight(@PathVariable Long flightId) {
-        flightService.deleteFlight(flightId);
+    @DeleteMapping("/{flightCode}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteFlight(@PathVariable String flightCode) {
+        flightService.deleteFlight(flightCode);
     }
 
-    @PutMapping("/{flightId}")
+    @PutMapping("/{flightCode}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateFlightInfo(@PathVariable Long flightId, @RequestBody UpdateFlightRequest updateCartItemRequest) {
-        flightService.updateFlightInfo(flightId, updateCartItemRequest);
+    @PreAuthorize("hasRole('ADMIN')")
+    public void updateFlightInfo(@PathVariable String flightCode, @RequestBody UpdateFlightRequest updateFlightRequest) {
+        flightService.updateFlightInfo(flightCode, updateFlightRequest);
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('PASSENGER', 'ADMIN')")
+    public List<FlightResponse> getAllFlights() {
+        return flightService.getAllFlights();
     }
 }

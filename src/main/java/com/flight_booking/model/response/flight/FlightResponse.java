@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,6 +15,7 @@ public class FlightResponse {
     private String flightCode;
     private String name;
     private String description;
-    private LocalDateTime departureTime;
-    private LocalDateTime arrivalTime;
+    private String formattedDepartureTime;
+    private String formattedArrivalTime;
+    private boolean pastFlight;
 }

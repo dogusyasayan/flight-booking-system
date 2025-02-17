@@ -14,11 +14,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SeatBuilder {
 
-    public List<Seat> build(Flight flight, CreateSeatsRequest createSeatsRequest) {
+    public List<Seat> build(Flight flight, CreateSeatsRequest createSeatsRequest, int existingSeatCount) {
         List<Seat> seats = new ArrayList<>();
         for (int i = 1; i <= createSeatsRequest.getNumberOfSeats(); i++) {
+            int seatNumber = existingSeatCount + i;
             Seat seat = Seat.builder()
-                    .seatNumber(flight.getFlightCode() + "-" + i)
+                    .seatNumber(flight.getFlightCode() + "-" + seatNumber)
                     .seatStatus(SeatStatus.AVAILABLE)
                     .seatPrice(createSeatsRequest.getSeatPrice())
                     .flight(flight)

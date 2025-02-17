@@ -1,0 +1,226 @@
+/* GENEL STİLLER */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('/static/images/passenger.jpg') no-repeat center center/cover;
+    color: white;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+h1 {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.dashboard-container {
+    background: rgba(0, 0, 0, 0.85);
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 1200px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    display: flex;
+    gap: 30px;
+    height: 600px;
+    overflow: hidden;
+}
+
+/* UÇUŞ LİSTESİ */
+.flight-list {
+    width: 50%;
+    height: 100%;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.flight-item {
+    cursor: pointer;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: background-color 0.3s;
+    color: white;
+}
+
+.flight-item:hover {
+    background-color: rgba(0, 123, 255, 0.2);
+}
+
+.flight-info {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.seat-info {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 5px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* BUTONLAR */
+.btn {
+    background-color: #007bff;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+}
+
+.btn-special {
+    background-color: #ffc107;
+    color: black;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* FORM ALANI */
+.forms-container {
+    width: 50%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input, .form-group p {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.form-group p {
+    background-color: #eee;
+    color: #333;
+    text-align: center;
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Ödeme FORMU */
+#paymentForm, #paymentDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#paymentForm button {
+    margin-top: 10px;
+}
+
+/* 🟡 ÖDEME DETAYLARI (KÜÇÜLTÜLDÜ) */
+#paymentDetails {
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    max-width: 100%;
+}
+
+#paymentDetails h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+#paymentDetails .form-row {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+#paymentDetails .form-group {
+    margin-bottom: 8px;
+}
+
+#paymentDetails .form-group label {
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+#paymentDetails .form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* 🟡 Expiration & CVC YAN YANA */
+#paymentDetails .input-flex {
+    display: flex;
+    gap: 6px;
+}
+
+#paymentDetails .input-flex input {
+    width: 50px;
+    text-align: center;
+}
+
+/* 🟡 CONFIRM PAYMENT BUTONU YUKARI ÇEKİLDİ */
+#paymentDetails button {
+    width: 100%;
+    font-size: 13px;
+    padding: 8px;
+    margin-top: 5px;  /* Yukarıdaki boşluk */
+    margin-bottom: 15px; /* AŞAĞI BOŞLUK EKLENDİ */
+}

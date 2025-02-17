@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger Panel</title>
+    <link rel="stylesheet" href="css/passenger.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<div class="dashboard-container">
+    <div class="header">
+        <h1>Passenger Panel</h1>
+        <button id="logoutBtn" class="logout-btn btn-special">Logout</button>
+    </div>
+
+    <div class="content">
+        <!-- Flights List -->
+        <div class="flight-list">
+            <h2>Available Flights</h2>
+            <ul id="flightsContainer"></ul>
+        </div>
+
+        <!-- Payment Section -->
+        <div class="forms-container">
+            <h2>Make a Payment</h2>
+            <form id="paymentForm">
+                <div class="form-group">
+                    <label for="flightId">Flight Code:</label>
+                    <input type="text" id="flightId" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="seatCount">Seat Count:</label>
+                    <input type="number" id="seatCount" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Total Price:</label>
+                    <p id="totalPrice">$0.00</p>
+                </div>
+                <button type="submit" class="btn btn-primary">Make Payment</button>
+            </form>
+
+            <!-- Payment Details (Küçültüldü ve düzenlendi) -->
+            <div id="paymentDetails" class="hidden payment-box">
+                <h3>Enter Payment Details</h3>
+                <form id="confirmPaymentForm">
+                    <div class="form-group">
+                        <label>Card Holder Name:</label>
+                        <input type="text" id="cardHolderName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Card Number:</label>
+                        <input type="text" id="cardNumber" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group small">
+                            <label>Expiration:</label>
+                            <div class="input-flex">
+                                <input type="text" id="cardExpireMonth" placeholder="MM" required maxlength="2">
+                                <input type="text" id="cardExpireYear" placeholder="YY" required maxlength="2">
+                            </div>
+                        </div>
+                        <div class="form-group small">
+                            <label>CVC:</label>
+                            <input type="text" id="cardCvc" required maxlength="3">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Confirm Payment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/passengerDashboard.js"></script>
+</body>
+</html>

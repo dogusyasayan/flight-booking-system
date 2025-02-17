@@ -9,6 +9,7 @@ import com.flight_booking.exception.FlightNumberAlreadyExists;
 import com.flight_booking.model.request.CreateFlightRequest;
 import com.flight_booking.model.request.UpdateFlightRequest;
 import com.flight_booking.model.response.flight.FlightInformationResponse;
+import com.flight_booking.model.response.flight.FlightResponse;
 import com.flight_booking.repository.FlightRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
@@ -39,7 +41,6 @@ class FlightServiceTest {
 
     @Test
     void it_should_create_flight() {
-        //given
         CreateFlightRequest createFlightRequest = CreateFlightRequest.builder()
                 .name("name")
                 .description("description")
@@ -52,17 +53,14 @@ class FlightServiceTest {
         given(flightBuilder.buildFlight(createFlightRequest)).willReturn(flight);
         given(flightRepository.findByFlightCode(flight.getFlightCode())).willReturn(Optional.empty());
 
-        //when
         flightService.createFlight(createFlightRequest);
 
-        //then
         verify(flightRepository).save(flight);
         verify(flightConverter).apply(flight);
     }
 
     @Test
     void it_should_throw_exception_when_flight_is_not_empty_create_flight() {
-        //given
         CreateFlightRequest createFlightRequest = CreateFlightRequest.builder()
                 .name("name")
                 .description("description")
@@ -75,83 +73,90 @@ class FlightServiceTest {
         given(flightBuilder.buildFlight(createFlightRequest)).willReturn(flight);
         given(flightRepository.findByFlightCode(flight.getFlightCode())).willReturn(Optional.of(flight));
 
-        //when
         FlightNumberAlreadyExists thrown = (FlightNumberAlreadyExists) catchThrowable(() -> flightService.createFlight(createFlightRequest));
 
-        //then
         assertThat(thrown).isInstanceOf(FlightNumberAlreadyExists.class);
     }
 
     @Test
     void it_should_update_flight_info() {
-        //given
+        String flightCode = "TK123";
         UpdateFlightRequest updateFlightRequest = new UpdateFlightRequest();
         Flight flight = Flight.builder()
-                .id(1L)
-                .flightCode("TK1997")
+                .flightCode(flightCode)
                 .flightStatus(FlightStatus.UPCOMING)
                 .build();
 
-        given(flightRepository.findById(1L)).willReturn(Optional.of(flight));
+        given(flightRepository.findByFlightCode(flightCode)).willReturn(Optional.of(flight));
         given(flightConverter.updateFlightInfo(flight, updateFlightRequest)).willReturn(flight);
 
-        //when
-        flightService.updateFlightInfo(1L, updateFlightRequest);
+        flightService.updateFlightInfo(flightCode, updateFlightRequest);
 
-        //then
         verify(flightRepository).save(flight);
     }
 
     @Test
     void it_should_delete_flight() {
-        //given
-        Long flightId = 1L;
+        String flightCode = "TK123";
         Flight flight = Flight.builder()
-                .id(flightId)
-                .flightCode("TK1997")
+                .flightCode(flightCode)
                 .flightStatus(FlightStatus.UPCOMING)
                 .build();
 
-        given(flightRepository.findById(flightId)).willReturn(Optional.of(flight));
+        given(flightRepository.findByFlightCode(flightCode)).willReturn(Optional.of(flight));
 
-        //when
-        flightService.deleteFlight(flightId);
+        flightService.deleteFlight(flightCode);
 
-        //then
         verify(flightRepository).delete(flight);
     }
 
     @Test
     void it_should_get_flight_information() {
-        //given
-        Long flightId = 1L;
+        String flightCode = "TK123";
         Flight flight = Flight.builder()
-                .id(flightId)
-                .flightCode("TK1997")
+                .flightCode(flightCode)
                 .flightStatus(FlightStatus.UPCOMING)
                 .build();
 
-        given(flightRepository.findById(flightId)).willReturn(Optional.of(flight));
+        given(flightRepository.findByFlightCode(flightCode)).willReturn(Optional.of(flight));
         given(flightConverter.infoFlight(flight, flight.getSeats())).willReturn(new FlightInformationResponse());
 
-        //when
-        FlightInformationResponse flightInformation = flightService.getFlightInformation(flightId);
+        FlightInformationResponse flightInformation = flightService.getFlightInformation(flightCode);
 
-        //then
         assertThat(flightInformation).isNotNull();
     }
 
     @Test
     void it_should_throw_exception_when_flight_not_found() {
-        //given
-        Long flightId = 1L;
+        String flightCode = "TK123";
 
-        given(flightRepository.findById(flightId)).willReturn(Optional.empty());
+        given(flightRepository.findByFlightCode(flightCode)).willReturn(Optional.empty());
 
-        //when
-        FlightNotFoundException thrown = (FlightNotFoundException) catchThrowable(() -> flightService.getFlightInformation(flightId));
+        FlightNotFoundException thrown = (FlightNotFoundException) catchThrowable(() -> flightService.getFlightInformation(flightCode));
 
-        // then
         assertThat(thrown).isInstanceOf(FlightNotFoundException.class);
     }
+
+    @Test
+    void it_should_get_all_flights() {
+        // given
+        FlightResponse flightResponse1 = FlightResponse.builder().build();
+        FlightResponse flightResponse2 = FlightResponse.builder().build();
+
+        Flight flight1 = Flight.builder().flightCode("TK1001").flightStatus(FlightStatus.UPCOMING).build();
+        Flight flight2 = Flight.builder().flightCode("TK1002").flightStatus(FlightStatus.COMPLETED).build();
+        List<Flight> flights = List.of(flight1, flight2);
+
+        given(flightRepository.findAll()).willReturn(flights);
+        given(flightConverter.apply(flight1)).willReturn(flightResponse1);
+        given(flightConverter.apply(flight2)).willReturn(flightResponse2);
+
+        // when
+        List<FlightResponse> flightResponses = flightService.getAllFlights();
+
+        // then
+        assertThat(flightResponses).isNotNull();
+        assertThat(flightResponses.size()).isEqualTo(2);
+    }
+
 }

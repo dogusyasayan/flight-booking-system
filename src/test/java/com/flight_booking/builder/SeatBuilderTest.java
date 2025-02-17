@@ -38,8 +38,10 @@ class SeatBuilderTest {
                 .seatPrice(BigDecimal.valueOf(50))
                 .build();
 
+        int existingSeatCount = 0;
+
         // when
-        List<Seat> result = seatBuilder.build(flight, createSeatsRequest);
+        List<Seat> result = seatBuilder.build(flight, createSeatsRequest, existingSeatCount);
 
         // then
         assertThat(result).isNotNull();

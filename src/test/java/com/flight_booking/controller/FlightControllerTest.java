@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -33,24 +34,28 @@ class FlightControllerTest {
     private FlightService flightService;
 
     @Test
+    @WithMockUser(roles = {"ADMIN", "PASSENGER"})
     void it_should_get_flight_information() throws Exception {
         //given
+        String flightCode = "TK123";
 
         //when
-        ResultActions resultActions = mockMvc.perform(get("/flight/123"));
+        ResultActions resultActions = mockMvc.perform(get("/flight/" + flightCode));
 
         //then
         resultActions.andExpect(status().isOk());
-        ArgumentCaptor<Long> argumentCaptor = ArgumentCaptor.forClass(Long.class);
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
         verify(flightService).getFlightInformation(argumentCaptor.capture());
-        Long value = argumentCaptor.getValue();
-        assertThat(value).isEqualTo(123L);
+        String capturedFlightCode = argumentCaptor.getValue();
+        assertThat(capturedFlightCode).isEqualTo(flightCode);
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void it_should_create_flight() throws Exception {
         //given
         CreateFlightRequest request = CreateFlightRequest.builder().build();
+
         //when
         ResultActions resultActions = mockMvc.perform(post("/flight")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -63,32 +68,51 @@ class FlightControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void it_should_update_flight_info() throws Exception {
         //given
+        String flightCode = "TK123";
         UpdateFlightRequest request = UpdateFlightRequest.builder().build();
 
         //when
-        ResultActions resultActions = mockMvc.perform(put("/flight/123")
+        ResultActions resultActions = mockMvc.perform(put("/flight/" + flightCode)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtils.toJson(request)));
 
         //then
         resultActions.andExpect(status().isNoContent());
-        ArgumentCaptor<Long> argumentCaptor1 = ArgumentCaptor.forClass(Long.class);
+        ArgumentCaptor<String> argumentCaptor1 = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<UpdateFlightRequest> argumentCaptor2 = ArgumentCaptor.forClass(UpdateFlightRequest.class);
         verify(flightService).updateFlightInfo(argumentCaptor1.capture(), argumentCaptor2.capture());
+        String capturedFlightCode = argumentCaptor1.getValue();
+        assertThat(capturedFlightCode).isEqualTo(flightCode);
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void it_should_delete_flight() throws Exception {
         //given
+        String flightCode = "TK123";
 
         //when
-        ResultActions resultActions = mockMvc.perform(delete("/flight/123"));
+        ResultActions resultActions = mockMvc.perform(delete("/flight/" + flightCode));
+
+        //then
+        resultActions.andExpect(status().isNoContent());
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+        verify(flightService).deleteFlight(argumentCaptor.capture());
+        String capturedFlightCode = argumentCaptor.getValue();
+        assertThat(capturedFlightCode).isEqualTo(flightCode);
+    }
+
+    @Test
+    @WithMockUser(roles = {"ADMIN", "PASSENGER"})
+    void it_should_get_all_flights() throws Exception {
+        //when
+        ResultActions resultActions = mockMvc.perform(get("/flight/all"));
 
         //then
         resultActions.andExpect(status().isOk());
-        ArgumentCaptor<Long> argumentCaptor1 = ArgumentCaptor.forClass(Long.class);
-        verify(flightService).deleteFlight(argumentCaptor1.capture());
+        verify(flightService).getAllFlights();
     }
 }
