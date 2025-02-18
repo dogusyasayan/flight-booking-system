@@ -97,7 +97,7 @@ Aşağıda **Flight Booking Management System** projesine ait **Admin Paneli** v
 - **Farklı fiyatlandırmalarla koltuk ekleyebilir** (Business, Economy gibi sınıflar).
 - **Uçuş ve koltuk bilgilerini düzenleyebilir**.
 
-📌 **Örnek Görsel:**
+📌 **Admin Dashboard:**
 > *![image](https://github.com/user-attachments/assets/fd1ed361-89fd-4130-8620-abf23891ffe0)*
 ---
 
@@ -106,7 +106,7 @@ Aşağıda **Flight Booking Management System** projesine ait **Admin Paneli** v
 - Uçuş detaylarını inceleyerek **koltuk satın alabilir**.
 - Ödeme işlemi **Mock Payment System** ile gerçekleştirilir.
 
-📌 **Örnek Görsel:**
+📌 **Passenger Dashboard:**
 > *![image](https://github.com/user-attachments/assets/9a126a9e-081b-4346-bf86-0947b46717f1)*
 
 ## ⚡ Kurulum
